@@ -64,6 +64,6 @@ lcov --capture --base-directory $SOURCE_DIR --directory . --output-file svt_av1_
 lcov --add-tracefile svt_av1_base.info --add-tracefile svt_av1_test.info --output-file $BUILD_DIR/svt_av1_total.info
 
 # remove unwanted
-lcov -r svt_av1_total.info "*third_party*" "*test*" "*/usr/*" -o svt_av1_final.info
+lcov -r svt_av1_total.info "*third_party*" "*test*" "*/usr/*" "*App*" "*Decoder*" -o svt_av1_final.info
 
 genhtml svt_av1_final.info --output-directory $OUTPUT_DIR
