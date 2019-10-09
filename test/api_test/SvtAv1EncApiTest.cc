@@ -64,7 +64,7 @@ TEST(EncApiDeathTest, set_parameter_null_pointer) {
  * Test coverage:
  * All the encoder parameters.
  */
-TEST(EncApiTest, check_null_pointer) {
+TEST(EncApiTest, DISABLED_check_null_pointer) {
     SvtAv1Context context;
     memset(&context, 0, sizeof(context));
 

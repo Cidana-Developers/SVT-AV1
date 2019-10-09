@@ -53,8 +53,7 @@ const std::vector<TestVideoVector> default_test_vectors = {
     std::make_tuple("niklas_640_480_30.yuv", YUV_VIDEO_FILE, IMG_FMT_420, 640,
                     480, 8, 0, 0, 60),
     std::make_tuple("park_joy_90p_10_420.y4m", Y4M_VIDEO_FILE,
-                    IMG_FMT_420P10_PACKED, 160, 90, 10, 0, 0, 0)
-};
+                    IMG_FMT_420P10_PACKED, 160, 90, 10, 0, 0, 0)};
 
 const std::vector<TestVideoVector> incomplete_sb_test_vectors = {
     std::make_tuple("park_joy_90p_8_420.y4m", Y4M_VIDEO_FILE, IMG_FMT_420, 160,

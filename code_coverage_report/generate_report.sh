@@ -50,6 +50,7 @@ seq 0 $(( $GTEST_TOTAL_SHARDS - 1 )) \
 unset GTEST_TOTAL_SHARDS
 ./SvtAv1E2ETests --gtest_filter="SvtAv1/ConformanceDeathTest.DefaultSettingTest/EncModeTest*"
 ./SvtAv1E2ETests --gtest_filter="SvtAv1/ConformanceDeathTest.DefaultSettingTest/ScreenToolTest2*"
+./SvtAv1E2ETests --gtest_filter="SvtAv1/ConformanceDeathTest.DefaultSettingTest/PaletteModeTest*"
 
 # test all cases
 # following cases take much time for long time full test
