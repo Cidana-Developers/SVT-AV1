@@ -130,7 +130,7 @@ class PerformanceCollect {
         return 0;
     }
 
-  private:
+  public:
     /** Get currect system time tick
      * @return
      * time tick of system clock in milliseconds
