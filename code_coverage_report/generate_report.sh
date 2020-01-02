@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/bash -ilex
+
 # check if we can find ../code_coverage_report
 base_path=`pwd`
 SOURCE_DIR=${base_path}/../
@@ -67,4 +68,8 @@ lcov --add-tracefile svt_av1_base.info --add-tracefile svt_av1_test.info --outpu
 # remove unwanted
 lcov -r svt_av1_total.info "*third_party*" "*test*" "*/usr/*" "*App*" "*Decoder*" -o svt_av1_final.info
 
+# generate report in html format
 genhtml svt_av1_final.info --output-directory $OUTPUT_DIR
+
+# send report from lcov to coveralls
+coveralls -r ../ -t yOlcjQBfEz5YqC1BqGbDoYMKPKG9h2YZs -l svt_av1_final.info
