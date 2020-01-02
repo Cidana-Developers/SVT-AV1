@@ -1,4 +1,4 @@
-#!/bin/bash -ilex
+#!/bin/bash -il
 
 # check if we can find ../code_coverage_report
 base_path=`pwd`

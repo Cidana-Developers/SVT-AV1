@@ -120,11 +120,11 @@ namespace AV1WarpFilter {
 ::testing::internal::ParamGenerator<WarpTestParams> BuildParams(
     warp_affine_func filter) {
     WarpTestParam params[] = {
-        make_tuple(4, 4, 50000, filter),
-        make_tuple(8, 8, 50000, filter),
-        make_tuple(64, 64, 1000, filter),
-        make_tuple(4, 16, 20000, filter),
-        make_tuple(32, 8, 10000, filter),
+        make_tuple(4, 4, 1000, filter),
+        make_tuple(8, 8, 1000, filter),
+        make_tuple(64, 64, 200, filter),
+        make_tuple(4, 16, 500, filter),
+        make_tuple(32, 8, 500, filter),
     };
     return ::testing::Combine(::testing::ValuesIn(params),
                               ::testing::Values(0, 1),
