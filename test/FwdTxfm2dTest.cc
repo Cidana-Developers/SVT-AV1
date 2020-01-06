@@ -94,7 +94,7 @@ class AV1FwdTxfm2dTest : public ::testing::TestWithParam<FwdTxfm2dParam> {
     void run_fwd_accuracy_check() {
         const int bd = 10;
         SVTRandom rnd(bd, false);
-        const int count_test_block = 1000;
+        const int count_test_block = 1000 / TEST_LOOP_DIV;
         const int width = tx_size_wide[cfg_.tx_size];
         const int height = tx_size_high[cfg_.tx_size];
         const int block_size = width * height;

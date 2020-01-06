@@ -65,7 +65,7 @@ typedef struct {
     Dequants dequant;
 } QuanTable;
 
-const int kTestNum = 1000;
+const int kTestNum = 1000 / TEST_LOOP_DIV;
 
 template <typename ParamType, typename FuncType>
 class QuantizeTest : public ::testing::TestWithParam<ParamType> {
@@ -376,15 +376,15 @@ TEST_P(QuantizeLbdTest, DISABLED_Speed) {
         }
         eb_start_time(&finish_time_seconds, &finish_time_useconds);
         eb_compute_overall_elapsed_time_ms(start_time_seconds,
-                                      start_time_useconds,
-                                      middle_time_seconds,
-                                      middle_time_useconds,
-                                      &time_c);
+                                           start_time_useconds,
+                                           middle_time_seconds,
+                                           middle_time_useconds,
+                                           &time_c);
         eb_compute_overall_elapsed_time_ms(middle_time_seconds,
-                                      middle_time_useconds,
-                                      finish_time_seconds,
-                                      finish_time_useconds,
-                                      &time_o);
+                                           middle_time_useconds,
+                                           finish_time_seconds,
+                                           finish_time_useconds,
+                                           &time_o);
 
         printf("c_time = %f \t simd_time = %f \t Gain = %f \n",
                time_c,
@@ -586,15 +586,15 @@ TEST_P(QuantizeHbdTest, DISABLED_Speed) {
         }
         eb_start_time(&finish_time_seconds, &finish_time_useconds);
         eb_compute_overall_elapsed_time_ms(start_time_seconds,
-                                      start_time_useconds,
-                                      middle_time_seconds,
-                                      middle_time_useconds,
-                                      &time_c);
+                                           start_time_useconds,
+                                           middle_time_seconds,
+                                           middle_time_useconds,
+                                           &time_c);
         eb_compute_overall_elapsed_time_ms(middle_time_seconds,
-                                      middle_time_useconds,
-                                      finish_time_seconds,
-                                      finish_time_useconds,
-                                      &time_o);
+                                           middle_time_useconds,
+                                           finish_time_seconds,
+                                           finish_time_useconds,
+                                           &time_o);
 
         printf("c_time = %f \t simd_time = %f \t Gain = %f \n",
                time_c,

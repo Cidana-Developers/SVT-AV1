@@ -42,8 +42,8 @@ using MSE_NXM_FUNC = uint32_t (*)(const uint8_t *src_ptr, int32_t src_stride,
                                   uint32_t *sse);
 
 using MSE_HIGHBD_NXM_FUNC = void (*)(const uint8_t *src_ptr, int32_t src_stride,
-                                  const uint8_t *ref_ptr, int32_t ref_stride,
-                                  uint32_t *sse);
+                                     const uint8_t *ref_ptr, int32_t ref_stride,
+                                     uint32_t *sse);
 
 typedef std::tuple<uint32_t, uint32_t, MSE_NXM_FUNC, MSE_NXM_FUNC> TestMseParam;
 typedef std::tuple<uint32_t, uint32_t, MSE_HIGHBD_NXM_FUNC, MSE_HIGHBD_NXM_FUNC>
@@ -140,10 +140,10 @@ class MseTestHighbd : public ::testing::TestWithParam<TestMseParamHighbd> {
           height_(TEST_GET_PARAM(1)),
           mse_tst_(TEST_GET_PARAM(2)),
           mse_ref_(TEST_GET_PARAM(3)) {
-          src_data_ =
-            reinterpret_cast<uint16_t *>(eb_aom_memalign(32, MAX_BLOCK_SIZE * 2));
-          ref_data_ =
-            reinterpret_cast<uint16_t *>(eb_aom_memalign(32, MAX_BLOCK_SIZE * 2));
+        src_data_ = reinterpret_cast<uint16_t *>(
+            eb_aom_memalign(32, MAX_BLOCK_SIZE * 2));
+        ref_data_ = reinterpret_cast<uint16_t *>(
+            eb_aom_memalign(32, MAX_BLOCK_SIZE * 2));
     }
 
     ~MseTestHighbd() {
@@ -164,11 +164,15 @@ class MseTestHighbd : public ::testing::TestWithParam<TestMseParamHighbd> {
 
             uint32_t sse_tst, sse_ref;
 
-            mse_ref_(CONVERT_TO_BYTEPTR(src_data_), width_,
-                     CONVERT_TO_BYTEPTR(ref_data_), height_,
+            mse_ref_(CONVERT_TO_BYTEPTR(src_data_),
+                     width_,
+                     CONVERT_TO_BYTEPTR(ref_data_),
+                     height_,
                      &sse_ref);
-            mse_tst_(CONVERT_TO_BYTEPTR(src_data_), width_,
-                     CONVERT_TO_BYTEPTR(ref_data_), height_,
+            mse_tst_(CONVERT_TO_BYTEPTR(src_data_),
+                     width_,
+                     CONVERT_TO_BYTEPTR(ref_data_),
+                     height_,
                      &sse_tst);
             ASSERT_EQ(sse_tst, sse_ref) << "SSE Error at index: " << i;
         }
@@ -181,11 +185,15 @@ class MseTestHighbd : public ::testing::TestWithParam<TestMseParamHighbd> {
         }
         uint32_t sse_tst, sse_ref;
 
-        mse_ref_(CONVERT_TO_BYTEPTR(src_data_), width_,
-                 CONVERT_TO_BYTEPTR(ref_data_), height_,
+        mse_ref_(CONVERT_TO_BYTEPTR(src_data_),
+                 width_,
+                 CONVERT_TO_BYTEPTR(ref_data_),
+                 height_,
                  &sse_ref);
-        mse_tst_(CONVERT_TO_BYTEPTR(src_data_), width_,
-                 CONVERT_TO_BYTEPTR(ref_data_), height_,
+        mse_tst_(CONVERT_TO_BYTEPTR(src_data_),
+                 width_,
+                 CONVERT_TO_BYTEPTR(ref_data_),
+                 height_,
                  &sse_tst);
 
         ASSERT_EQ(sse_tst, sse_ref) << "Error at MSE maximum test ";
@@ -208,11 +216,10 @@ TEST_P(MseTestHighbd, MaxTest) {
     run_max_test();
 };
 
-INSTANTIATE_TEST_CASE_P(Variance, MseTestHighbd,
-                        ::testing::Values(TestMseParamHighbd(16, 16,
-                                                             &eb_aom_highbd_8_mse16x16_sse2,
-                                                             &eb_aom_highbd_8_mse16x16_c)));
-
+INSTANTIATE_TEST_CASE_P(
+    Variance, MseTestHighbd,
+    ::testing::Values(TestMseParamHighbd(16, 16, &eb_aom_highbd_8_mse16x16_sse2,
+                                         &eb_aom_highbd_8_mse16x16_c)));
 
 // sum of squares test
 static uint32_t mb_ss_ref(const int16_t *src) {
@@ -261,7 +268,7 @@ class SumSquareTest : public ::testing::TestWithParam<SUM_SQUARE_FUNC> {
         int32_t mask = (1 << 8) - 1;
         SVTRandom rnd(0, mask);
         int16_t mem[256];
-        for (int i = 0; i < 100; ++i) {
+        for (int i = 0; i < 100 / TEST_LOOP_DIV; ++i) {
             for (int j = 0; j < 256; ++j)
                 mem[j] = rnd.random() - rnd.random();
 
@@ -531,4 +538,3 @@ TEST_P(HBDVarianceTest, OneQuarterTest) {
 INSTANTIATE_TEST_CASE_P(HBDVarianceTest, HBDVarianceTest,
                         ::testing::ValuesIn(TEST_BLOCK_SIZES));
 }  // namespace
-

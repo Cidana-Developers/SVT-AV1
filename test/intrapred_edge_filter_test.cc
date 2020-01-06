@@ -80,7 +80,7 @@ class UpsampleTest {
     }
 
   protected:
-    static const int num_tests = 1000000;
+    static const int num_tests = 1000000 / TEST_LOOP_DIV;
     static const int edge_buf_size = 2 * 64 + 32;
     static const int start_offset = 16;
 
@@ -224,7 +224,7 @@ class FilterEdgeTest {
     }
 
   protected:
-    static const int num_tests = 1000000;
+    static const int num_tests = 1000000 / TEST_LOOP_DIV;
     static const int edge_buf_size = 2 * MAX_TX_SIZE + 32;
     static const int start_offset = 15;
 

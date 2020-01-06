@@ -1037,7 +1037,7 @@ class GetEightsad_Test : public ::testing::WithParamInterface<sad_CalTestParam>,
         SVTRandom rnd1(0, max);
         /******************************/
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 10000 / TEST_LOOP_DIV; i++) {
             uint32_t best_sad32x32[4];
             uint32_t best_sad32x32_1[4], best_sad32x32_2[4];
             uint32_t best_mv32x32_1[4], best_mv32x32_2[4];
@@ -1104,7 +1104,7 @@ class GetEightsad_Test : public ::testing::WithParamInterface<sad_CalTestParam>,
         uint32_t best_mv32x32_1[4] = {
             0x00010002, 0x0003FFF4, 0xFFF70008, 0xFFF9FFF1};
         uint32_t best_sad64x64_1 = UINT_MAX, best_mv64x64_1 = 0x0078FF94;
-        const uint64_t num_loop = 100000000;
+        const uint64_t num_loop = 100000000 / TEST_LOOP_DIV;
         double time_c, time_o;
         uint64_t start_time_seconds, start_time_useconds;
         uint64_t middle_time_seconds, middle_time_useconds;

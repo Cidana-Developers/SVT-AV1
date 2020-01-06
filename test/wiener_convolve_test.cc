@@ -224,7 +224,8 @@ class AV1WienerConvolveTest : public ::testing::TestWithParam<ParamType> {
 
     virtual void speed_and_check(const InterpKernel& hkernel,
                                  const InterpKernel& vkernel,
-                                 const ConvolveParams& params, const int tap) = 0;
+                                 const ConvolveParams& params,
+                                 const int tap) = 0;
 
     virtual void run_random_test(const int test_times) {
         // Generate random filter kernels
@@ -372,15 +373,15 @@ class AV1WienerConvolveLbdTest
 
         eb_start_time(&finish_time_seconds, &finish_time_useconds);
         eb_compute_overall_elapsed_time_ms(start_time_seconds,
-                                      start_time_useconds,
-                                      middle_time_seconds,
-                                      middle_time_useconds,
-                                      &time_c);
+                                           start_time_useconds,
+                                           middle_time_seconds,
+                                           middle_time_useconds,
+                                           &time_c);
         eb_compute_overall_elapsed_time_ms(middle_time_seconds,
-                                      middle_time_useconds,
-                                      finish_time_seconds,
-                                      finish_time_useconds,
-                                      &time_o);
+                                           middle_time_useconds,
+                                           finish_time_seconds,
+                                           finish_time_useconds,
+                                           &time_o);
 
         printf("convolve(%3dx%3d, tap %d): %6.2f\n",
                out_w_,
@@ -452,10 +453,10 @@ class AV1WienerConvolveHbdTest
 };
 
 TEST_P(AV1WienerConvolveLbdTest, random_test) {
-    run_random_test(1000);
+    run_random_test(1000 / TEST_LOOP_DIV);
 }
 
-TEST_P(AV1WienerConvolveLbdTest, speed_test) {
+TEST_P(AV1WienerConvolveLbdTest, DISABLED_speed_test) {
     run_speed_test();
 }
 
@@ -465,10 +466,10 @@ INSTANTIATE_TEST_CASE_P(
                        ::testing::ValuesIn(wiener_convolve_func_table)));
 
 TEST_P(AV1WienerConvolveHbdTest, random_test) {
-    run_random_test(1000);
+    run_random_test(1000 / TEST_LOOP_DIV);
 }
 
-TEST_P(AV1WienerConvolveHbdTest, speed_test) {
+TEST_P(AV1WienerConvolveHbdTest, DISABLED_speed_test) {
     run_speed_test();
 }
 

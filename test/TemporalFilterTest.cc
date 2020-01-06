@@ -296,7 +296,7 @@ class TemporalFilterTest : public ::testing::Test,
     }
 
     void run_test() {
-        const int loops = 100;
+        const int loops = 100 / TEST_LOOP_DIV;
         const uint8_t mask = (1 << 8) - 1;
         const uint16_t hbd_mask = (1 << 10) - 1;
         SVTRandom rnd_uint8(0, mask);

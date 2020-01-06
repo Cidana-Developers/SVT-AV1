@@ -69,7 +69,7 @@ class WedgeUtilTest : public ::testing::Test {
 extern "C" uint64_t aom_sum_squares_i16_c(const int16_t *src, uint32_t n);
 #define MAX_MASK_VALUE (1 << WEDGE_WEIGHT_BITS)
 TEST_F(WedgeUtilTest, MaskSignRandomTest) {
-    const int iterations = 10000;
+    const int iterations = 10000 / TEST_LOOP_DIV;
     SVTRandom rnd(13, true);             // max residual is 13-bit
     SVTRandom m_rnd(0, MAX_MASK_VALUE);  // [0, MAX_MASK_VALUE]
     SVTRandom n_rnd(1, 8191 / 64);       // required by assembly implementation
@@ -138,7 +138,7 @@ TEST_F(WedgeUtilTest, MaskSignExtremeTest) {
 // test av1_wedge_compute_delta_squares_avx2
 // element-by-element calculate the difference of square
 TEST_F(WedgeUtilTest, ComputeDeltaSquareTest) {
-    const int iterations = 10000;
+    const int iterations = 10000 / TEST_LOOP_DIV;
     SVTRandom rnd(13, true);  // max residual is 13-bit
     SVTRandom n_rnd(1, MAX_SB_SQUARE / 64);
     DECLARE_ALIGNED(32, int16_t, ref_diff[MAX_SB_SQUARE]);
@@ -173,7 +173,7 @@ TEST_F(WedgeUtilTest, ComputeDeltaSquareTest) {
 // test av1_wedge_sse_from_residuals_avx2
 // calculate the sse of two prediction combined with mask m
 TEST_F(WedgeUtilTest, SseFromResidualRandomTest) {
-    const int iterations = 10000;
+    const int iterations = 10000 / TEST_LOOP_DIV;
     SVTRandom rnd(13, true);             // max residual is 13-bit
     SVTRandom m_rnd(0, MAX_MASK_VALUE);  // [0, MAX_MASK_VALUE]
     SVTRandom n_rnd(1, MAX_SB_SQUARE / 64);

@@ -21,6 +21,12 @@
 #include <math.h>
 #include <random>
 
+#ifdef COVERAGE_MODE
+#define TEST_LOOP_DIV (10)
+#else
+#define TEST_LOOP_DIV (1)
+#endif  // COVERAGE_MODE
+
 /** @defgroup svt_av1_test_tool Tool set of test
  *  Defines the tool set of unit test such as random generator, bits shifting
  * and etc...

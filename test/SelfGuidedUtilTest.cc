@@ -238,15 +238,15 @@ class PixelProjErrorTest
         ASSERT_EQ(err_ref, err_test);
 
         eb_compute_overall_elapsed_time_ms(start_time_seconds,
-                                      start_time_useconds,
-                                      middle_time_seconds,
-                                      middle_time_useconds,
-                                      &time_c);
+                                           start_time_useconds,
+                                           middle_time_seconds,
+                                           middle_time_useconds,
+                                           &time_c);
         eb_compute_overall_elapsed_time_ms(middle_time_seconds,
-                                      middle_time_useconds,
-                                      finish_time_seconds,
-                                      finish_time_useconds,
-                                      &time_o);
+                                           middle_time_useconds,
+                                           finish_time_seconds,
+                                           finish_time_useconds,
+                                           &time_o);
 
         printf("Average Nanoseconds per Function Call\n");
         printf(
@@ -318,7 +318,7 @@ TEST_P(PixelProjErrorLbdTest, MatchTestWithRandomSizeAndValue) {
 TEST_P(PixelProjErrorLbdTest, MatchTestWithExtremeValue) {
     run_extreme_test();
 }
-TEST_P(PixelProjErrorLbdTest, /*DISABLED_*/ SpeedTest) {
+TEST_P(PixelProjErrorLbdTest, DISABLED_SpeedTest) {
     run_speed_test(256, 1, 1);
     run_speed_test(256, 1, 0);
     run_speed_test(256, 0, 0);
@@ -384,7 +384,7 @@ TEST(SelfGuidedToolsTest, GetProjSubspaceMatchTest) {
     const int32_t pu_width = RESTORATION_PROC_UNIT_SIZE;
     const int32_t pu_height = RESTORATION_PROC_UNIT_SIZE;
     const int32_t width = 256, height = 256, stride = 288, out_stride = 288;
-    const int NUM_ITERS = 2000;
+    const int NUM_ITERS = 2000 / TEST_LOOP_DIV;
     int i, j, k;
 
     uint8_t *input_ = (uint8_t *)eb_aom_memalign(

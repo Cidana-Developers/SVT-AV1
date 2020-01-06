@@ -154,7 +154,10 @@ class BitstreamWriterTest : public ::testing::Test {
         // setup test bits
         switch (bit_gen_method) {
         case 0:
-        case 1: memset(test_bits, bit_gen_method, total_bits * sizeof(test_bits[0])); break;
+        case 1:
+            memset(
+                test_bits, bit_gen_method, total_bits * sizeof(test_bits[0]));
+            break;
         default:
             for (int i = 0; i < total_bits; ++i)
                 test_bits[i] = bit_dist(gen_);
@@ -168,7 +171,7 @@ class BitstreamWriterTest : public ::testing::Test {
 };
 
 TEST_F(BitstreamWriterTest, write_bits_random) {
-    const int num_tests = 100;
+    const int num_tests = 100 / TEST_LOOP_DIV;
     for (int i = 0; i < num_tests; ++i)
         write_random_bits(i);
 }

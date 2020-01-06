@@ -54,6 +54,12 @@ if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx2")
 endif()
 
+if(COVERAGE)
+    message("Unit Tests in Coverage Mode")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCOVERAGE_MODE")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCOVERAGE_MODE")
+endif()
+
 file(GLOB all_files
     "*.h"
     "*.c"

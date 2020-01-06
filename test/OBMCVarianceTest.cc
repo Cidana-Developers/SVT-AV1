@@ -93,7 +93,7 @@ class OBMCVarianceTest : public ::testing::TestWithParam<ObmcVarParam> {
 };
 
 TEST_P(OBMCVarianceTest, RunCheckOutput) {
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 };
 
 #define OBMC_VAR_FUNC_C(W, H) aom_obmc_variance##W##x##H##_c
@@ -195,7 +195,7 @@ class OBMCSubPixelVarianceTest
 };
 
 TEST_P(OBMCSubPixelVarianceTest, RunCheckOutput) {
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 };
 
 #define OBMC_SUB_PIX_VAR_FUNC_C(W, H) aom_obmc_sub_pixel_variance##W##x##H##_c

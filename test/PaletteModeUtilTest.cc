@@ -129,7 +129,7 @@ class ColorCountLbdTest : public ColorCountTest<uint8_t> {
 };
 
 TEST_F(ColorCountLbdTest, MatchTest) {
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 }
 
 class ColorCountHbdTest : public ColorCountTest<uint16_t> {
@@ -145,23 +145,23 @@ class ColorCountHbdTest : public ColorCountTest<uint16_t> {
 
 TEST_F(ColorCountHbdTest, MatchTest8Bit) {
     bd_ = 8;
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 }
 
 TEST_F(ColorCountHbdTest, MatchTest10Bit) {
     bd_ = 10;
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 }
 
 TEST_F(ColorCountHbdTest, MatchTest12Bit) {
     bd_ = 12;
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 }
 
 extern "C" void av1_k_means_dim1_c(const int *data, int *centroids,
-                                 uint8_t *indices, int n, int k, int max_itr);
+                                   uint8_t *indices, int n, int k, int max_itr);
 extern "C" void av1_k_means_dim2_c(const int *data, int *centroids,
-                                 uint8_t *indices, int n, int k, int max_itr);
+                                   uint8_t *indices, int n, int k, int max_itr);
 static const int MaxItr = 50;
 /**
  * @brief Unit test for kmeans functions:
@@ -302,19 +302,18 @@ class KMeansTest : public ::testing::TestWithParam<int> {
 };
 
 TEST_P(KMeansTest, CheckOutput) {
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 };
 
 TEST_P(KMeansTest, CheckOutput2D) {
-    run_test_2d(1000);
+    run_test_2d(1000 / TEST_LOOP_DIV);
 };
 
 INSTANTIATE_TEST_CASE_P(PalleteMode, KMeansTest,
                         ::testing::Range(PALETTE_MIN_SIZE, PALETTE_MAX_SIZE));
 
-
 typedef void (*av1_k_means_func)(const int *data, int *centroids,
-                      uint8_t *indices, int n, int k, int max_itr);
+                                 uint8_t *indices, int n, int k, int max_itr);
 
 #define MAX_BLOCK_SIZE (MAX_SB_SIZE * MAX_SB_SIZE)
 typedef std::tuple<int, int> BlockSize;
@@ -337,17 +336,15 @@ BlockSize TEST_BLOCK_SIZES[] = {BlockSize(4, 4),
 TestPattern TEST_PATTERNS[] = {MIN, MAX, RANDOM};
 
 static void av1_calc_indices_dim1_c_wrap(const int *data, int *centroids,
-                                    uint8_t *indices, int n, int k,
-                                    int max_itr)
-{
+                                         uint8_t *indices, int n, int k,
+                                         int max_itr) {
     (void)max_itr;
     av1_calc_indices_dim1_c(data, centroids, indices, n, k);
 }
 
 static void av1_calc_indices_dim1_avx2_wrap(const int *data, int *centroids,
-                                    uint8_t *indices, int n, int k,
-                                    int max_itr)
-{
+                                            uint8_t *indices, int n, int k,
+                                            int max_itr) {
     (void)max_itr;
     av1_calc_indices_dim1_avx2(data, centroids, indices, n, k);
 }
@@ -371,8 +368,7 @@ FuncPair TEST_FUNC_PAIRS[] = {
     FuncPair(av1_calc_indices_dim1_c_wrap, av1_calc_indices_dim1_avx2_wrap),
     FuncPair(av1_k_means_dim1_c, av1_k_means_dim1_avx2),
     FuncPair(av1_calc_indices_dim2_c_wrap, av1_calc_indices_dim2_avx2_wrap),
-    FuncPair(av1_k_means_dim2_c, av1_k_means_dim2_avx2)
-};
+    FuncPair(av1_k_means_dim2_c, av1_k_means_dim2_avx2)};
 
 typedef std::tuple<TestPattern, BlockSize, FuncPair> Av1KMeansDimParam;
 
@@ -497,15 +493,15 @@ class Av1KMeansDim : public ::testing::WithParamInterface<Av1KMeansDimParam>,
         check_output();
 
         eb_compute_overall_elapsed_time_ms(start_time_seconds,
-                                      start_time_useconds,
-                                      middle_time_seconds,
-                                      middle_time_useconds,
-                                      &time_c);
+                                           start_time_useconds,
+                                           middle_time_seconds,
+                                           middle_time_useconds,
+                                           &time_c);
         eb_compute_overall_elapsed_time_ms(middle_time_seconds,
-                                      middle_time_useconds,
-                                      finish_time_seconds,
-                                      finish_time_useconds,
-                                      &time_o);
+                                           middle_time_useconds,
+                                           finish_time_seconds,
+                                           finish_time_useconds,
+                                           &time_o);
 
         printf("    speedup %5.2fx\n", time_c / time_o);
     }

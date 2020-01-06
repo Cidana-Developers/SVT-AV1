@@ -40,10 +40,9 @@
 using svt_av1_test_tool::SVTRandom;  // to generate the random
 namespace {
 
-using InvSqrTxfm2dFun = void (*)(const int32_t *input,
-                                 uint16_t *output_r, int32_t stride_r,
-                                 uint16_t *output_w, int32_t stride_w,
-                                 TxType tx_type, int32_t bd);
+using InvSqrTxfm2dFun = void (*)(const int32_t *input, uint16_t *output_r,
+                                 int32_t stride_r, uint16_t *output_w,
+                                 int32_t stride_w, TxType tx_type, int32_t bd);
 using InvRectTxfm2dType1Func = void (*)(const int32_t *input,
                                         uint16_t *output_r, int32_t stride_r,
                                         uint16_t *output_w, int32_t stride_w,
@@ -54,11 +53,10 @@ using InvRectTxfm2dType2Func = void (*)(const int32_t *input,
                                         uint16_t *output_w, int32_t stride_w,
                                         TxType tx_type, TxSize tx_size,
                                         int32_t bd);
-using LowbdInvTxfm2dFunc = void (*)(const int32_t *input,
-                                    uint8_t *output_r, int32_t stride_r,
-                                    uint8_t *output_w, int32_t stride_w,
-                                    TxType tx_type, TxSize tx_size,
-                                    int32_t eob);
+using LowbdInvTxfm2dFunc = void (*)(const int32_t *input, uint8_t *output_r,
+                                    int32_t stride_r, uint8_t *output_w,
+                                    int32_t stride_w, TxType tx_type,
+                                    TxSize tx_size, int32_t eob);
 typedef struct {
     const char *name;
     InvSqrTxfm2dFun ref_func;
@@ -99,7 +97,8 @@ static const InvSqrTxfmFuncPair inv_txfm_c_avx2_func_pairs[TX_64X64 + 1] = {
     SQR_FUNC_PAIRS(eb_av1_inv_txfm2d_add_4x4, avx2, all_txtype_imp),
     SQR_FUNC_PAIRS(eb_av1_inv_txfm2d_add_8x8, avx2, all_txtype_imp),
     SQR_FUNC_PAIRS(eb_av1_inv_txfm2d_add_16x16, avx2, all_txtype_imp),
-    SQR_FUNC_PAIRS(eb_av1_inv_txfm2d_add_32x32, avx2, is_tx_type_imp_32x32_avx2),
+    SQR_FUNC_PAIRS(eb_av1_inv_txfm2d_add_32x32, avx2,
+                   is_tx_type_imp_32x32_avx2),
     EMPTY_FUNC_PAIRS(eb_av1_inv_txfm2d_add_64x64),
 };
 
@@ -108,7 +107,8 @@ static const InvSqrTxfmFuncPair inv_txfm_c_sse4_1_func_pairs[TX_64X64 + 1] = {
     SQR_FUNC_PAIRS(eb_av1_inv_txfm2d_add_8x8, sse4_1, dct_adst_combine_imp),
     SQR_FUNC_PAIRS(eb_av1_inv_txfm2d_add_16x16, sse4_1, dct_adst_combine_imp),
     EMPTY_FUNC_PAIRS(eb_av1_inv_txfm2d_add_32x32),
-    SQR_FUNC_PAIRS(eb_av1_inv_txfm2d_add_64x64, sse4_1, is_tx_type_imp_64x64_sse4),
+    SQR_FUNC_PAIRS(eb_av1_inv_txfm2d_add_64x64, sse4_1,
+                   is_tx_type_imp_64x64_sse4),
 };
 
 // from TX_4X8 to TX_SIZES_ALL
@@ -138,10 +138,10 @@ static const InvRectType2TxfmFuncPair inv_4x8{eb_av1_inv_txfm2d_add_4x8_c,
                                               eb_av1_inv_txfm2d_add_4x8_sse4_1};
 static const InvRectType2TxfmFuncPair inv_8x4{eb_av1_inv_txfm2d_add_8x4_c,
                                               eb_av1_inv_txfm2d_add_8x4_sse4_1};
-static const InvRectType2TxfmFuncPair inv_4x16{eb_av1_inv_txfm2d_add_4x16_c,
-                                               eb_av1_inv_txfm2d_add_4x16_sse4_1};
-static const InvRectType2TxfmFuncPair inv_16x4{eb_av1_inv_txfm2d_add_16x4_c,
-                                               eb_av1_inv_txfm2d_add_16x4_sse4_1};
+static const InvRectType2TxfmFuncPair inv_4x16{
+    eb_av1_inv_txfm2d_add_4x16_c, eb_av1_inv_txfm2d_add_4x16_sse4_1};
+static const InvRectType2TxfmFuncPair inv_16x4{
+    eb_av1_inv_txfm2d_add_16x4_c, eb_av1_inv_txfm2d_add_16x4_sse4_1};
 static const InvRectType2TxfmFuncPair *get_rect_type2_func_pair(
     const TxSize tx_size) {
     switch (tx_size) {
@@ -238,12 +238,17 @@ class InvTxfm2dAsmTest : public ::testing::TestWithParam<InvTxfm2dParam> {
                 populate_with_random(width, height, type, tx_size);
 
                 pair.ref_func(input_,
-                              output_ref_, stride_,
-                              output_ref_, stride_,
-                              type, bd_);
+                              output_ref_,
+                              stride_,
+                              output_ref_,
+                              stride_,
+                              type,
+                              bd_);
                 pair.test_func(input_,
-                               output_test_, stride_,
-                               output_test_, stride_,
+                               output_test_,
+                               stride_,
+                               output_test_,
+                               stride_,
                                type,
                                bd_);
 
@@ -263,7 +268,8 @@ class InvTxfm2dAsmTest : public ::testing::TestWithParam<InvTxfm2dParam> {
         const int height = tx_size_high[tx_size];
         const int max_eob = av1_get_max_eob(tx_size);
 
-        const InvRectTxfm2dType1Func test_func = eb_av1_highbd_inv_txfm_add_avx2;
+        const InvRectTxfm2dType1Func test_func =
+            eb_av1_highbd_inv_txfm_add_avx2;
         const InvRectTxfm2dType1Func ref_func = rect_type1_ref_funcs[tx_size];
         if (ref_func == nullptr)
             return;
@@ -284,11 +290,23 @@ class InvTxfm2dAsmTest : public ::testing::TestWithParam<InvTxfm2dParam> {
                 clear_high_freq_coeffs(tx_size, type, eob, max_eob);
 
                 ref_func(input_,
-                    output_ref_, stride_, output_ref_, stride_,
-                    type, tx_size, eob, bd_);
+                         output_ref_,
+                         stride_,
+                         output_ref_,
+                         stride_,
+                         type,
+                         tx_size,
+                         eob,
+                         bd_);
                 test_func(input_,
-                          output_test_, stride_, output_test_,
-                          stride_, type, tx_size, eob, bd_);
+                          output_test_,
+                          stride_,
+                          output_test_,
+                          stride_,
+                          type,
+                          tx_size,
+                          eob,
+                          bd_);
 
                 ASSERT_EQ(0,
                           memcmp(output_ref_,
@@ -314,18 +332,26 @@ class InvTxfm2dAsmTest : public ::testing::TestWithParam<InvTxfm2dParam> {
             if (is_txfm_allowed(type, tx_size) == false)
                 continue;
 
-            const int loops = 100;
+            const int loops = 100 / TEST_LOOP_DIV;
             for (int k = 0; k < loops; k++) {
                 populate_with_random(width, height, type, tx_size);
 
                 test_pair->ref_func(input_,
-                                    output_ref_, stride_,
-                                    output_ref_, stride_,
-                                    type, tx_size, bd_);
+                                    output_ref_,
+                                    stride_,
+                                    output_ref_,
+                                    stride_,
+                                    type,
+                                    tx_size,
+                                    bd_);
                 test_pair->test_func(input_,
-                                     output_test_, stride_,
-                                     output_test_, stride_,
-                                     type, tx_size, bd_);
+                                     output_test_,
+                                     stride_,
+                                     output_test_,
+                                     stride_,
+                                     type,
+                                     tx_size,
+                                     bd_);
 
                 ASSERT_EQ(0,
                           memcmp(output_ref_,
@@ -411,23 +437,31 @@ class InvTxfm2dAsmTest : public ::testing::TestWithParam<InvTxfm2dParam> {
                 }
 
                 target_func_(input_,
-                             lowbd_output_test_, stride_,
-                             lowbd_output_test_, stride_,
+                             lowbd_output_test_,
+                             stride_,
+                             lowbd_output_test_,
+                             stride_,
                              type,
                              tx_size,
                              eob);
                 if (tx_size >= TX_SIZES)
-                    lowbd_rect_ref_funcs[tx_size](
-                        input_,
-                        output_ref_, stride_,
-                        output_ref_, stride_,
-                        type, tx_size, eob, bd_);
+                    lowbd_rect_ref_funcs[tx_size](input_,
+                                                  output_ref_,
+                                                  stride_,
+                                                  output_ref_,
+                                                  stride_,
+                                                  type,
+                                                  tx_size,
+                                                  eob,
+                                                  bd_);
                 else
-                    lowbd_sqr_ref_funcs[tx_size](
-                        input_,
-                        output_ref_, stride_,
-                        output_ref_, stride_,
-                        type, bd_);
+                    lowbd_sqr_ref_funcs[tx_size](input_,
+                                                 output_ref_,
+                                                 stride_,
+                                                 output_ref_,
+                                                 stride_,
+                                                 type,
+                                                 bd_);
 
                 // compare, note the output buffer has stride.
                 for (int i = 0; i < height; i++) {
@@ -529,15 +563,15 @@ class InvTxfm2dAsmTest : public ::testing::TestWithParam<InvTxfm2dParam> {
 
             eb_start_time(&finish_time_seconds, &finish_time_useconds);
             eb_compute_overall_elapsed_time_ms(start_time_seconds,
-                                          start_time_useconds,
-                                          middle_time_seconds,
-                                          middle_time_useconds,
-                                          &time_c);
+                                               start_time_useconds,
+                                               middle_time_seconds,
+                                               middle_time_useconds,
+                                               &time_c);
             eb_compute_overall_elapsed_time_ms(middle_time_seconds,
-                                          middle_time_useconds,
-                                          finish_time_seconds,
-                                          finish_time_useconds,
-                                          &time_o);
+                                               middle_time_useconds,
+                                               finish_time_seconds,
+                                               finish_time_useconds,
+                                               &time_o);
 
             ASSERT_EQ(energy_ref, energy_asm);
 

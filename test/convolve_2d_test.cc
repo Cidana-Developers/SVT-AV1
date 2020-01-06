@@ -699,7 +699,8 @@ class AV1LbdConvolve2DTest
         uint64_t middle_time_seconds, middle_time_useconds;
         uint64_t finish_time_seconds, finish_time_useconds;
 
-        const uint64_t num_loop = 10000000000 / (output_w * output_h);
+        const uint64_t num_loop =
+            10000000000 / (output_w * output_h) / TEST_LOOP_DIV;
 
         eb_start_time(&start_time_seconds, &start_time_useconds);
 
@@ -735,15 +736,15 @@ class AV1LbdConvolve2DTest
 
         eb_start_time(&finish_time_seconds, &finish_time_useconds);
         eb_compute_overall_elapsed_time_ms(start_time_seconds,
-                                      start_time_useconds,
-                                      middle_time_seconds,
-                                      middle_time_useconds,
-                                      &time_c);
+                                           start_time_useconds,
+                                           middle_time_seconds,
+                                           middle_time_useconds,
+                                           &time_c);
         eb_compute_overall_elapsed_time_ms(middle_time_seconds,
-                                      middle_time_useconds,
-                                      finish_time_seconds,
-                                      finish_time_useconds,
-                                      &time_o);
+                                           middle_time_useconds,
+                                           finish_time_seconds,
+                                           finish_time_useconds,
+                                           &time_o);
 
         printf("convolve(%3dx%3d, tap (%d, %d)): %6.2f\n",
                output_w,
@@ -944,15 +945,15 @@ class AV1HbdConvolve2DTest
 
         eb_start_time(&finish_time_seconds, &finish_time_useconds);
         eb_compute_overall_elapsed_time_ms(start_time_seconds,
-                                      start_time_useconds,
-                                      middle_time_seconds,
-                                      middle_time_useconds,
-                                      &time_c);
+                                           start_time_useconds,
+                                           middle_time_seconds,
+                                           middle_time_useconds,
+                                           &time_c);
         eb_compute_overall_elapsed_time_ms(middle_time_seconds,
-                                      middle_time_useconds,
-                                      finish_time_seconds,
-                                      finish_time_useconds,
-                                      &time_o);
+                                           middle_time_useconds,
+                                           finish_time_seconds,
+                                           finish_time_useconds,
+                                           &time_o);
 
         printf(
             "convolve(%3dx%3d): %6.2f\n", output_w, output_h, time_c / time_o);

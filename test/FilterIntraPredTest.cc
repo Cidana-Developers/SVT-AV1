@@ -93,7 +93,7 @@ class FilterIntraPredTest : public ::testing::TestWithParam<PredParams> {
 };
 
 TEST_P(FilterIntraPredTest, RunCheckOutput) {
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 }
 
 const FilterIntraMode PRED_MODE_TABLE[] = {FILTER_DC_PRED,

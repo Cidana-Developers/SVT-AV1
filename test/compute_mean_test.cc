@@ -51,7 +51,7 @@ namespace {
 using svt_av1_test_tool::SVTRandom;
 
 static const int block_size = 8 * 8;
-static const int test_times = 10000;
+static const int test_times = 10000 / TEST_LOOP_DIV;
 static const std::string test_name[2] = {"Noraml Test:\n", "Boundary Test:\n"};
 
 static const std::string print_data(const uint8_t* data, const int width,

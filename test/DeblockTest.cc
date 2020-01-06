@@ -35,8 +35,8 @@
 #include "EbDeblockingFilter_SSE2.h"
 #include "loopfilter_ref.h"
 
-using ::testing::make_tuple;
 using libaom_test::ACMRandom;
+using ::testing::make_tuple;
 namespace {
 
 // expose the target functions
@@ -127,10 +127,9 @@ class LoopFilterTest : public ::testing::TestWithParam<TestParamType> {
         (void)bd;
     }
 
-
     void run_test() {
         ACMRandom rnd(ACMRandom::DeterministicSeed());
-        const int count_test_block = 10000;
+        const int count_test_block = 10000 / TEST_LOOP_DIV;
         const int32_t p = kNumCoeffs / 32;
         DECLARE_ALIGNED(16, Sample, tst_s[kNumCoeffs]);
         DECLARE_ALIGNED(16, Sample, ref_s[kNumCoeffs]);

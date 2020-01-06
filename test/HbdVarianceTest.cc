@@ -249,7 +249,7 @@ class HbdVarianceTest : public ::testing::TestWithParam<HbdVarianceParam> {
 };
 
 TEST_P(HbdVarianceTest, ZeroTest) {
-    run_zero_test(10);
+    run_zero_test(10 / TEST_LOOP_DIV);
 };
 
 TEST_P(HbdVarianceTest, MaximumTest) {
@@ -257,7 +257,7 @@ TEST_P(HbdVarianceTest, MaximumTest) {
 };
 
 TEST_P(HbdVarianceTest, MatchTest) {
-    run_match_test(10);
+    run_match_test(10 / TEST_LOOP_DIV);
 };
 
 static const HbdVarianceParam HbdTestVector[] = {
@@ -440,7 +440,7 @@ class HbdSquareVarianceTest
 };
 
 TEST_P(HbdSquareVarianceTest, ZeroTest) {
-    run_zero_test(10);
+    run_zero_test(10 / TEST_LOOP_DIV);
 };
 
 TEST_P(HbdSquareVarianceTest, MaximumTest) {
@@ -448,7 +448,7 @@ TEST_P(HbdSquareVarianceTest, MaximumTest) {
 };
 
 TEST_P(HbdSquareVarianceTest, MatchTest) {
-    run_match_test(10);
+    run_match_test(10 / TEST_LOOP_DIV);
 };
 
 static const HbdSquareVarianceParam HbdSquareVarTestVector[] = {

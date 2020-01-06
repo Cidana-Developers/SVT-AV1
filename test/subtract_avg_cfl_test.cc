@@ -150,7 +150,7 @@ class CflSubAvgTest : public ::testing::TestWithParam<TxSize> {
 };
 
 TEST_P(CflSubAvgTest, subtract_average_asm_test) {
-    run_asm_compare_test(1000);
+    run_asm_compare_test(1000 / TEST_LOOP_DIV);
 }
 
 INSTANTIATE_TEST_CASE_P(AVX2, CflSubAvgTest, ::testing::ValuesIn(TEST_PARAMS));

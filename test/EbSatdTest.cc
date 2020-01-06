@@ -104,8 +104,8 @@ class Compute8x8SatdTest : public ::testing::Test {
             << "error in dcValue for " << fail_pixel_count << "times";
     }
 
-    void run_rnd_test() {
-        for (int i = 0; i < 500; i++) {
+    void run_rnd_test(int test_times) {
+        for (int i = 0; i < test_times; i++) {
             prepare_data(RANDOM);
             int fail_pixel_count = 0;
             for (uint16_t j = 0; j < _dcSize_; j++) {
@@ -113,8 +113,7 @@ class Compute8x8SatdTest : public ::testing::Test {
                     fail_pixel_count++;
             }
             EXPECT_EQ(0, fail_pixel_count)
-                << "error in dcValue for " << fail_pixel_count
-                << "times";
+                << "error in dcValue for " << fail_pixel_count << "times";
         }
     }
 
@@ -134,7 +133,7 @@ TEST_F(Compute8x8SatdTest, maxTest) {
 };
 
 TEST_F(Compute8x8SatdTest, rndTest) {
-    run_rnd_test();
+    run_rnd_test(500 / TEST_LOOP_DIV);
 };
 
 }  // namespace

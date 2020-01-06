@@ -36,8 +36,8 @@
 
 #include "TxfmCommon.h"
 
-using svt_av1_test_tool::SVTRandom;
 using svt_av1_test_tool::round_shift;
+using svt_av1_test_tool::SVTRandom;
 namespace {
 
 using InvTxfm1dParam = std::tuple<TxfmType, int>;
@@ -88,7 +88,7 @@ class AV1InvTxfm1dTest : public ::testing::TestWithParam<InvTxfm1dParam> {
 
     void run_inv_accuracy_check() {
         SVTRandom rnd(10, true);
-        const int count_test_block = 5000;
+        const int count_test_block = 5000 / TEST_LOOP_DIV;
         for (int ti = 0; ti < count_test_block; ++ti) {
             // prepare random test data
             for (int ni = 0; ni < txfm_size_; ++ni) {

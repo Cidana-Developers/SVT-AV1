@@ -34,7 +34,7 @@ namespace {
 static const int MaskMax = 64;
 
 using Obmcsad_Func = uint32_t (*)(const uint8_t* pre, int pre_stride,
-                                 const int32_t* wsrc, const int32_t* mask);
+                                  const int32_t* wsrc, const int32_t* mask);
 using Obmcsad_Param = tuple<Obmcsad_Func, Obmcsad_Func>;
 
 class OBMCsad_Test : public ::testing::TestWithParam<Obmcsad_Param> {
@@ -89,7 +89,7 @@ class OBMCsad_Test : public ::testing::TestWithParam<Obmcsad_Param> {
 };
 
 TEST_P(OBMCsad_Test, RunCheckOutput) {
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 };
 
 #define OBMC_SAD_FUNC_C(W, H) aom_obmc_sad##W##x##H##_c

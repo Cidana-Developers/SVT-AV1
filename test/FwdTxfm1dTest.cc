@@ -95,7 +95,7 @@ class AV1FwdTxfm1dTest : public ::testing::TestWithParam<FwdTxfm1dParam> {
         // The input is residual, and it should be signed bd+1 bits
         SVTRandom rnd(bd + 1, true);
         const int cos_bit = 14;
-        const int count_test_block = 5000;
+        const int count_test_block = 5000 / TEST_LOOP_DIV;
         for (int ti = 0; ti < count_test_block; ++ti) {
             // prepare random test data
             for (int ni = 0; ni < txfm_size_; ++ni) {

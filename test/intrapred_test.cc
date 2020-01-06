@@ -26,7 +26,7 @@ using std::make_tuple;
 using std::tuple;
 using svt_av1_test_tool::SVTRandom;
 
-const int count_test_block = 1000;
+const int count_test_block = 1000 / TEST_LOOP_DIV;
 
 using INTRAPRED_HBD = void (*)(uint16_t *dst, ptrdiff_t stride,
                                const uint16_t *above, const uint16_t *left,

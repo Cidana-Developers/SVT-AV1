@@ -364,14 +364,14 @@ static const TransformationType transform_table[] = {
     TRANSLATION, ROTZOOM, AFFINE};
 
 TEST_P(RansacIntTest, CheckOutput) {
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 };
 
 INSTANTIATE_TEST_CASE_P(GlobalMotion, RansacIntTest,
                         ::testing::ValuesIn(transform_table));
 
 TEST_P(RansacDoubleTest, CheckOutput) {
-    run_test(1000);
+    run_test(1000 / TEST_LOOP_DIV);
 };
 
 INSTANTIATE_TEST_CASE_P(GlobalMotion, RansacDoubleTest,

@@ -110,7 +110,7 @@ class FwdTxfm2dAsmTest : public ::testing::TestWithParam<FwdTxfm2dAsmParam> {
             if (is_txfm_allowed(type, tx_size_) == false)
                 continue;
 
-            const int loops = 100;
+            const int loops = 100 / TEST_LOOP_DIV;
             for (int k = 0; k < loops; k++) {
                 populate_with_random();
 

@@ -37,7 +37,6 @@
 #include "EbTime.h"
 #include "EncodeTxbRef_C.h"
 
-
 using svt_av1_test_tool::SVTRandom;  // to generate the random
 namespace {
 
@@ -238,15 +237,15 @@ class EncodeTxbInitLevelTest
 
         if (is_speed) {
             eb_compute_overall_elapsed_time_ms(start_time_seconds,
-                                          start_time_useconds,
-                                          middle_time_seconds,
-                                          middle_time_useconds,
-                                          &time_c);
+                                               start_time_useconds,
+                                               middle_time_seconds,
+                                               middle_time_useconds,
+                                               &time_c);
             eb_compute_overall_elapsed_time_ms(middle_time_seconds,
-                                          middle_time_useconds,
-                                          finish_time_seconds,
-                                          finish_time_useconds,
-                                          &time_o);
+                                               middle_time_useconds,
+                                               finish_time_seconds,
+                                               finish_time_useconds,
+                                               &time_o);
             printf("eb_av1_txb_init_levels(%2dx%2d): %6.2f\n",
                    width,
                    height,
@@ -284,7 +283,7 @@ class EncodeTxbInitLevelTest
 };
 
 TEST_P(EncodeTxbInitLevelTest, txb_init_levels_match) {
-    const int loops = 100;
+    const int loops = 100 / TEST_LOOP_DIV;
     for (int i = 0; i < loops; ++i) {
         run_test(TEST_GET_PARAM(0), TEST_GET_PARAM(1), false);
     }

@@ -120,11 +120,11 @@ namespace AV1WarpFilter {
 ::testing::internal::ParamGenerator<WarpTestParams> BuildParams(
     warp_affine_func filter) {
     WarpTestParam params[] = {
-        make_tuple(4, 4, 50000, filter),
-        make_tuple(8, 8, 50000, filter),
-        make_tuple(64, 64, 1000, filter),
-        make_tuple(4, 16, 20000, filter),
-        make_tuple(32, 8, 10000, filter),
+        make_tuple(4, 4, 1000 / TEST_LOOP_DIV, filter),
+        make_tuple(8, 8, 1000 / TEST_LOOP_DIV, filter),
+        make_tuple(64, 64, 200 / TEST_LOOP_DIV, filter),
+        make_tuple(4, 16, 500 / TEST_LOOP_DIV, filter),
+        make_tuple(32, 8, 500 / TEST_LOOP_DIV, filter),
     };
     return ::testing::Combine(::testing::ValuesIn(params),
                               ::testing::Values(0, 1),
@@ -226,10 +226,10 @@ void AV1WarpFilterTest::RunSpeedTest(warp_affine_func test_impl) {
 
     eb_start_time(&finish_time_seconds, &finish_time_useconds);
     eb_compute_overall_elapsed_time_ms(start_time_seconds,
-                                  start_time_useconds,
-                                  finish_time_seconds,
-                                  finish_time_useconds,
-                                  &elapsed_time);
+                                       start_time_useconds,
+                                       finish_time_seconds,
+                                       finish_time_useconds,
+                                       &elapsed_time);
     printf("warp %3dx%-3d: %7.2f ns\n",
            out_w,
            out_h,
@@ -314,23 +314,23 @@ void AV1WarpFilterTest::RunCheckOutput(warp_affine_func test_impl) {
                                     quant_dist_lookup_table[ii][jj][1];
                             }
                             eb_av1_warp_affine_c(mat,
-                                              input,
-                                              w,
-                                              h,
-                                              stride,
-                                              output,
-                                              32,
-                                              32,
-                                              out_w,
-                                              out_h,
-                                              out_w,
-                                              sub_x,
-                                              sub_y,
-                                              &conv_params,
-                                              alpha,
-                                              beta,
-                                              gamma,
-                                              delta);
+                                                 input,
+                                                 w,
+                                                 h,
+                                                 stride,
+                                                 output,
+                                                 32,
+                                                 32,
+                                                 out_w,
+                                                 out_h,
+                                                 out_w,
+                                                 sub_x,
+                                                 sub_y,
+                                                 &conv_params,
+                                                 alpha,
+                                                 beta,
+                                                 gamma,
+                                                 delta);
                             if (use_no_round) {
                                 conv_params = get_conv_params_no_round(
                                     ref, do_average, 0, dstb, out_w, 1, bd);
@@ -522,10 +522,10 @@ void AV1HighbdWarpFilterTest::RunSpeedTest(highbd_warp_affine_func test_impl) {
 
     eb_start_time(&finish_time_seconds_tst, &finish_time_useconds_tst);
     eb_compute_overall_elapsed_time_ms(start_time_seconds_tst,
-                                  start_time_useconds_tst,
-                                  finish_time_seconds_tst,
-                                  finish_time_useconds_tst,
-                                  &elapsed_time_tst);
+                                       start_time_useconds_tst,
+                                       finish_time_seconds_tst,
+                                       finish_time_useconds_tst,
+                                       &elapsed_time_tst);
 
     eb_start_time(&start_time_seconds_ref, &start_time_useconds_ref);
 
@@ -552,10 +552,10 @@ void AV1HighbdWarpFilterTest::RunSpeedTest(highbd_warp_affine_func test_impl) {
 
     eb_start_time(&finish_time_seconds_ref, &finish_time_useconds_ref);
     eb_compute_overall_elapsed_time_ms(start_time_seconds_ref,
-                                  start_time_useconds_ref,
-                                  finish_time_seconds_ref,
-                                  finish_time_useconds_ref,
-                                  &elapsed_time_ref);
+                                       start_time_useconds_ref,
+                                       finish_time_seconds_ref,
+                                       finish_time_useconds_ref,
+                                       &elapsed_time_ref);
 
     printf("highbd warp %3dx%-3d: %7.2fx faster\n",
            out_w,
@@ -645,24 +645,24 @@ void AV1HighbdWarpFilterTest::RunCheckOutput(
                             }
 
                             eb_av1_highbd_warp_affine_c(mat,
-                                                     input,
-                                                     w,
-                                                     h,
-                                                     stride,
-                                                     output,
-                                                     32,
-                                                     32,
-                                                     out_w,
-                                                     out_h,
-                                                     out_w,
-                                                     sub_x,
-                                                     sub_y,
-                                                     bd,
-                                                     &conv_params,
-                                                     alpha,
-                                                     beta,
-                                                     gamma,
-                                                     delta);
+                                                        input,
+                                                        w,
+                                                        h,
+                                                        stride,
+                                                        output,
+                                                        32,
+                                                        32,
+                                                        out_w,
+                                                        out_h,
+                                                        out_w,
+                                                        sub_x,
+                                                        sub_y,
+                                                        bd,
+                                                        &conv_params,
+                                                        alpha,
+                                                        beta,
+                                                        gamma,
+                                                        delta);
                             if (use_no_round) {
                                 // TODO(angiebird): Change this to test_impl
                                 // once we have SIMD implementation

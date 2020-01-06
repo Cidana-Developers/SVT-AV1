@@ -73,7 +73,7 @@ class CompBlendTest : public ::testing::TestWithParam<BlendTestParam> {
     }
 
     void run_test() {
-        const int iterations = 1000;
+        const int iterations = 1000 / TEST_LOOP_DIV;
         SVTRandom rnd(0, (1 << bd_) - 1);
         SVTRandom mask_rnd(0, 64);
 
