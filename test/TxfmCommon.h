@@ -27,61 +27,61 @@ static const int8_t test_txfm_range[12] = {
 
 // export forward transform functions
 void eb_av1_fdct4_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                   const int8_t *stage_range);
+                      const int8_t *stage_range);
 void eb_av1_fdct8_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                   const int8_t *stage_range);
+                      const int8_t *stage_range);
 void eb_av1_fdct16_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                    const int8_t *stage_range);
+                       const int8_t *stage_range);
 void eb_av1_fdct32_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                    const int8_t *stage_range);
+                       const int8_t *stage_range);
 void eb_av1_fdct64_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                    const int8_t *stage_range);
+                       const int8_t *stage_range);
 void eb_av1_fadst4_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                    const int8_t *stage_range);
+                       const int8_t *stage_range);
 void eb_av1_fadst8_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                    const int8_t *stage_range);
+                       const int8_t *stage_range);
 void eb_av1_fadst16_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                     const int8_t *stage_range);
+                        const int8_t *stage_range);
 void av1_fadst32_new(const int32_t *input, int32_t *output, int8_t cos_bit,
                      const int8_t *stage_range);
 void eb_av1_fidentity4_c(const int32_t *input, int32_t *output, int8_t cos_bit,
-                      const int8_t *stage_range);
+                         const int8_t *stage_range);
 void eb_av1_fidentity8_c(const int32_t *input, int32_t *output, int8_t cos_bit,
-                      const int8_t *stage_range);
+                         const int8_t *stage_range);
 void eb_av1_fidentity16_c(const int32_t *input, int32_t *output, int8_t cos_bit,
-                       const int8_t *stage_range);
+                          const int8_t *stage_range);
 void eb_av1_fidentity32_c(const int32_t *input, int32_t *output, int8_t cos_bit,
-                       const int8_t *stage_range);
+                          const int8_t *stage_range);
 void av1_fidentity64_c(const int32_t *input, int32_t *output, int8_t cos_bit,
                        const int8_t *stage_range);
 
 // export inverse transform functions
 void eb_av1_idct4_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                   const int8_t *stage_range);
+                      const int8_t *stage_range);
 void eb_av1_idct8_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                   const int8_t *stage_range);
+                      const int8_t *stage_range);
 void eb_av1_idct16_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                    const int8_t *stage_range);
+                       const int8_t *stage_range);
 void eb_av1_idct32_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                    const int8_t *stage_range);
+                       const int8_t *stage_range);
 void eb_av1_idct64_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                    const int8_t *stage_range);
+                       const int8_t *stage_range);
 void eb_av1_iadst4_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                    const int8_t *stage_range);
+                       const int8_t *stage_range);
 void eb_av1_iadst8_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                    const int8_t *stage_range);
+                       const int8_t *stage_range);
 void eb_av1_iadst16_new(const int32_t *input, int32_t *output, int8_t cos_bit,
-                     const int8_t *stage_range);
+                        const int8_t *stage_range);
 void av1_iadst32_new(const int32_t *input, int32_t *output, int8_t cos_bit,
                      const int8_t *stage_range);
 void eb_av1_iidentity4_c(const int32_t *input, int32_t *output, int8_t cos_bit,
-                      const int8_t *stage_range);
+                         const int8_t *stage_range);
 void eb_av1_iidentity8_c(const int32_t *input, int32_t *output, int8_t cos_bit,
-                      const int8_t *stage_range);
+                         const int8_t *stage_range);
 void eb_av1_iidentity16_c(const int32_t *input, int32_t *output, int8_t cos_bit,
-                       const int8_t *stage_range);
+                          const int8_t *stage_range);
 void eb_av1_iidentity32_c(const int32_t *input, int32_t *output, int8_t cos_bit,
-                       const int8_t *stage_range);
+                          const int8_t *stage_range);
 void av1_iidentity64_c(const int32_t *input, int32_t *output, int8_t cos_bit,
                        const int8_t *stage_range);
 
@@ -170,37 +170,50 @@ static INLINE int get_txfm1d_size(TxfmType txfm_type) {
 }
 
 static INLINE bool is_txfm_allowed(TxType tx_type, TxSize tx_size) {
-
-    int all_types[] = {DCT_DCT, ADST_DCT, DCT_ADST, ADST_ADST, FLIPADST_DCT,
-        DCT_FLIPADST, FLIPADST_FLIPADST, ADST_FLIPADST, FLIPADST_ADST, IDTX,
-        V_DCT, H_DCT, V_ADST, H_ADST, V_FLIPADST, H_FLIPADST, TX_TYPES, -1 };
-    int *support_types = all_types;
+    const int all_types[] = {DCT_DCT,
+                             ADST_DCT,
+                             DCT_ADST,
+                             ADST_ADST,
+                             FLIPADST_DCT,
+                             DCT_FLIPADST,
+                             FLIPADST_FLIPADST,
+                             ADST_FLIPADST,
+                             FLIPADST_ADST,
+                             IDTX,
+                             V_DCT,
+                             H_DCT,
+                             V_ADST,
+                             H_ADST,
+                             V_FLIPADST,
+                             H_FLIPADST,
+                             TX_TYPES,
+                             -1};
+    const int *support_types = all_types;
 
     switch (tx_size) {
-        case TX_32X32: {
-            int types[] = {DCT_DCT, IDTX, V_DCT, H_DCT, -1};
-            support_types = types;
-            break;
-        }
-        case TX_32X64:
-        case TX_64X32:
-        case TX_16X64:
-        case TX_64X16: {
-            int types[] = {DCT_DCT, -1};
-            support_types = types;
-            break;
-        }
-        case TX_16X32:
-        case TX_32X16:
-        case TX_64X64:
-        case TX_8X32:
-        case TX_32X8: {
-            int types[] = {DCT_DCT, IDTX, -1};
-            support_types = types;
-            break;
-        }
-        default:
-            break;
+    case TX_32X32: {
+        static const int types[] = {DCT_DCT, IDTX, V_DCT, H_DCT, -1};
+        support_types = types;
+        break;
+    }
+    case TX_32X64:
+    case TX_64X32:
+    case TX_16X64:
+    case TX_64X16: {
+        static const int types[] = {DCT_DCT, -1};
+        support_types = types;
+        break;
+    }
+    case TX_16X32:
+    case TX_32X16:
+    case TX_64X64:
+    case TX_8X32:
+    case TX_32X8: {
+        static const int types[] = {DCT_DCT, IDTX, -1};
+        support_types = types;
+        break;
+    }
+    default: break;
     }
 
     while (*support_types > -1) {
