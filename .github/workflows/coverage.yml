@@ -1,0 +1,73 @@
+name: Coverage
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  coverage-tests:
+    runs-on: ubuntu-18.04
+    env: { 'CC': 'gcc-7', 'CXX': 'g++-7' }
+    strategy:
+      fail-fast: false
+      matrix:
+        index: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 ]
+    name: 'Coverage Tests (Ubuntu 18.04, GCC 7.x) Shard ${{ matrix.index }}'
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y yasm cmake lcov
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Compile SVT-AV1 (Debug, Tests and TestVectors)
+        run: |
+          ./Build/linux/build.sh debug --coverage test
+          pushd ./Build/linux/Debug
+          make TestVectors
+          popd
+      - name: Run coverage tests shard
+        run: |
+          lcov --capture --initial --base-directory ./Source  --directory ./Build/linux/Debug --output-file svt_av1_base.info
+          env SVT_AV1_TEST_VECTOR_PATH="./test/vectors" GTEST_TOTAL_SHARDS=20 GTEST_SHARD_INDEX=${{ matrix.index }} ./Bin/Debug/SvtAv1UnitTests
+          lcov --capture --base-directory ./Source --directory ./Build/linux/Debug --output-file svt_av1_test.info
+          lcov --add-tracefile svt_av1_base.info --add-tracefile svt_av1_test.info --output-file svt_av1_total.info
+          lcov -r svt_av1_total.info "*third_party*" "*test*" "*/usr/*" "*App*" "*Decoder*" -o svt_av1_final.info
+      - uses: actions/upload-artifact@v1
+        with:
+          name: lcov_${{ matrix.index }}
+          path: ./svt_av1_final.info
+
+  coveralls-upload:
+    needs: coverage-tests
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        index: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 ]
+    name: 'Coveralls Collection ${{ matrix.index }}'
+    steps:
+      - uses: actions/download-artifact@v1
+        with:
+          name: lcov_${{ matrix.index }}
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
+          path-to-lcov: ./lcov_${{ matrix.index }}/svt_av1_final.info
+
+  coveralls-finish:
+    needs: [ coverage-tests, coveralls-upload ]
+    runs-on: ubuntu-18.04
+    name: Coveralls Report
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true

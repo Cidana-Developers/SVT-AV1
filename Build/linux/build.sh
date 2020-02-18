@@ -57,6 +57,8 @@ Usage: $0 [OPTION] ... -- [OPTIONS FOR CMAKE]
     --cc, cc=*          Set C compiler [$CC]
     --cxx, cxx=*        Set CXX compiler [$CXX]
     --clean, clean      Remove build and Bin folders
+    --coverage,         Remove build and Bin folders
+    coverage
     --debug, debug      Build debug
     --shared, shared    Build shared libs
 -x, --static, static    Build static libs
@@ -236,6 +238,7 @@ parse_options() {
         debug) build_debug=true && shift ;;
         build_shared) CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS -DBUILD_SHARED_LIBS=ON" && shift ;;
         build_static) CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS -DBUILD_SHARED_LIBS=OFF" && shift ;;
+        coverage) CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS -DCOVERAGE=ON" && shift ;;
         generator=*) CMAKE_EXTRA_FLAGS="$CMAKE_EXTRA_FLAGS -G${1#*=}" && shift ;;
         install) build_install=true && shift ;;
         jobs=*) jobs="${1#*=}" && shift ;;
@@ -281,8 +284,9 @@ else
             asm) parse_options asm="$2" && shift 2 ;;
             bindir) parse_options bindir="$2" && shift 2 ;;
             cc) parse_options cc="$2" && shift 2 ;;
-            cxx) parse_options cxx="$2" && shift 2 ;;
             clean) parse_options clean && shift ;;
+            coverage) parse_options coverage && shift ;;
+            cxx) parse_options cxx="$2" && shift 2 ;;
             debug) parse_options debug && shift ;;
             gen) parse_options generator="$2" && shift 2 ;;
             install) parse_options install && shift ;;
