@@ -100,7 +100,7 @@ SvtAv1E2ETestFramework::SvtAv1E2ETestFramework() : enc_setting(GetParam()) {
     enable_recon = false;
     enable_decoder = false;
     enable_stat = false;
-    enable_save_bitstream = false;
+    enable_save_bitstream = true;
     enable_analyzer = false;
     enable_config = false;
     enc_config_ = create_enc_config();
@@ -257,7 +257,8 @@ void SvtAv1E2ETestFramework::init_test(TestVideoVector &test_vector) {
 
     // create IvfFile if required.
     if (enable_save_bitstream) {
-        std::string fn = std::get<0>(test_vector) + ".ivf";
+        std::string fn =
+            std::get<0>(test_vector) + "_" + enc_setting.name + ".ivf";
         output_file_ = new IvfFile(fn.c_str());
     }
 
@@ -582,25 +583,17 @@ static void write_ivf_frame_header(
 
 void SvtAv1E2ETestFramework::write_compress_data(
     const EbBufferHeaderType *output) {
-    write_ivf_frame_header(
-        output_file_,
-        output->n_filled_len);
-    fwrite(output->p_buffer,
-        1,
-        output->n_filled_len,
-        output_file_->file);
+    write_ivf_frame_header(output_file_, output->n_filled_len);
+    fwrite(output->p_buffer, 1, output->n_filled_len, output_file_->file);
 }
 
 void SvtAv1E2ETestFramework::process_compress_data(
     const EbBufferHeaderType *data) {
     ASSERT_NE(data, nullptr);
-    if (refer_dec_ == nullptr) {
-        if (output_file_)
-            write_compress_data(data);
-        return;
-    }
-
-    decode_compress_data(data->p_buffer, data->n_filled_len);
+    if (output_file_)
+        write_compress_data(data);
+    if (refer_dec_)
+        decode_compress_data(data->p_buffer, data->n_filled_len);
 }
 
 void SvtAv1E2ETestFramework::decode_compress_data(const uint8_t *data,

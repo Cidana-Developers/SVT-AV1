@@ -18,9 +18,9 @@ EB_EXTERN EB_ALIGN(16) const uint8_t weak_chroma_filter[2][32] = {
      1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2},
 };
 
-inline void luma_weak_filter_avx2_intrin(__m256i top, __m256i curr, __m256i bottom,
-                                         __m256i curr_prev, __m256i curr_next,
-                                         uint8_t *ptr_denoised, uint8_t *ptr_noise) {
+static inline void luma_weak_filter_avx2_intrin(__m256i top, __m256i curr, __m256i bottom,
+                                                __m256i curr_prev, __m256i curr_next,
+                                                uint8_t *ptr_denoised, uint8_t *ptr_noise) {
     __m256i top_first_half, bottom_first_half, filter_first_half, filter_second_half,
         curr_next_first_half, curr_next_second_half, weights, curr_left_mid_first_half_weight,
         curr_left_mid_first_halflo, curr_left_mid_first_halfhi, curr_prev_permutation,
@@ -63,9 +63,9 @@ inline void luma_weak_filter_avx2_intrin(__m256i top, __m256i curr, __m256i bott
 
     _mm256_storeu_si256((__m256i *)(ptr_noise), _mm256_subs_epu8(curr, filter_first_half));
 }
-inline void luma_weak_filter_128_avx2_intrin(__m128i top, __m128i curr, __m128i bottom,
-                                             __m128i curr_prev, __m128i curr_next,
-                                             uint8_t *ptr_denoised, uint8_t *ptr_noise) {
+static inline void luma_weak_filter_128_avx2_intrin(__m128i top, __m128i curr, __m128i bottom,
+                                                    __m128i curr_prev, __m128i curr_next,
+                                                    uint8_t *ptr_denoised, uint8_t *ptr_noise) {
     __m128i top_first_half, bottom_first_half, filter_first_half, filter_second_half,
         curr_next_first_half, curr_next_second_half, weights, curr_left_mid_first_half_weight,
         curr_left_mid_first_halflo, curr_left_mid_first_halfhi;
@@ -100,11 +100,12 @@ inline void luma_weak_filter_128_avx2_intrin(__m128i top, __m128i curr, __m128i 
 
     _mm_storel_epi64((__m128i *)(ptr_noise), _mm_subs_epu8(curr, filter_first_half));
 }
-inline void chroma_weak_luma_strong_filter_avx2_intrin(__m256i top, __m256i curr, __m256i bottom,
-                                                       __m256i curr_prev, __m256i curr_next,
-                                                       __m256i top_prev, __m256i top_next,
-                                                       __m256i bottom_prev, __m256i bottom_next,
-                                                       uint8_t *ptr_denoised) {
+static inline void chroma_weak_luma_strong_filter_avx2_intrin(__m256i top, __m256i curr,
+                                                              __m256i bottom, __m256i curr_prev,
+                                                              __m256i curr_next, __m256i top_prev,
+                                                              __m256i top_next, __m256i bottom_prev,
+                                                              __m256i  bottom_next,
+                                                              uint8_t *ptr_denoised) {
     __m256i filter_first_half, filter_second_half, curr_next_first_half, curr_next_second_half,
         weights, curr_left_mid_first_half_weight, curr_left_mid_first_halflo,
         curr_left_mid_first_halfhi, curr_prev_permutation, curr_permutation, curr_next_permutation,
@@ -186,12 +187,10 @@ inline void chroma_weak_luma_strong_filter_avx2_intrin(__m256i top, __m256i curr
     _mm256_storeu_si256((__m256i *)(ptr_denoised), filter_first_half);
 }
 
-inline void chroma_weak_luma_strong_filter_128_avx2_intrin(__m128i top, __m128i curr,
-                                                           __m128i bottom, __m128i curr_prev,
-                                                           __m128i curr_next, __m128i top_prev,
-                                                           __m128i top_next, __m128i bottom_prev,
-                                                           __m128i  bottom_next,
-                                                           uint8_t *ptr_denoised) {
+static inline void chroma_weak_luma_strong_filter_128_avx2_intrin(
+    __m128i top, __m128i curr, __m128i bottom, __m128i curr_prev, __m128i curr_next,
+    __m128i top_prev, __m128i top_next, __m128i bottom_prev, __m128i bottom_next,
+    uint8_t *ptr_denoised) {
     __m128i filter_first_half, filter_second_half, curr_next_first_half, curr_next_second_half,
         weights, curr_left_mid_first_half_weight, curr_left_mid_first_halflo,
         curr_left_mid_first_halfhi, top_left_mid_first_halflo, top_left_mid_first_half_weight,
@@ -254,10 +253,10 @@ inline void chroma_weak_luma_strong_filter_128_avx2_intrin(__m128i top, __m128i 
     _mm_storel_epi64((__m128i *)(ptr_denoised), filter_first_half);
 }
 
-inline void chroma_strong_avx2_intrin(__m256i top, __m256i curr, __m256i bottom, __m256i curr_prev,
-                                      __m256i curr_next, __m256i top_prev, __m256i top_next,
-                                      __m256i bottom_prev, __m256i bottom_next,
-                                      uint8_t *ptr_denoised) {
+static inline void chroma_strong_avx2_intrin(__m256i top, __m256i curr, __m256i bottom,
+                                             __m256i curr_prev, __m256i curr_next, __m256i top_prev,
+                                             __m256i top_next, __m256i bottom_prev,
+                                             __m256i bottom_next, uint8_t *ptr_denoised) {
     __m256i curr_left_mid_first_halflo, curr_left_mid_first_halfhi, curr_prev_permutation,
         curr_permutation, curr_next_permutation, top_permutation, top_prev_permutation,
         top_left_mid_first_halflo, top_next_permutation, top_left_mid_first_halfhi,
@@ -366,10 +365,11 @@ inline void chroma_strong_avx2_intrin(__m256i top, __m256i curr, __m256i bottom,
     _mm256_storeu_si256((__m256i *)(ptr_denoised), curr_left_mid_first_halflo);
 }
 
-inline void chroma_strong_128_avx2_intrin(__m128i top, __m128i curr, __m128i bottom,
-                                          __m128i curr_prev, __m128i curr_next, __m128i top_prev,
-                                          __m128i top_next, __m128i bottom_prev,
-                                          __m128i bottom_next, uint8_t *ptr_denoised) {
+static inline void chroma_strong_128_avx2_intrin(__m128i top, __m128i curr, __m128i bottom,
+                                                 __m128i curr_prev, __m128i curr_next,
+                                                 __m128i top_prev, __m128i top_next,
+                                                 __m128i bottom_prev, __m128i bottom_next,
+                                                 uint8_t *ptr_denoised) {
     __m128i curr_left_mid_first_halflo, curr_left_mid_first_halfhi, top_left_mid_first_halflo,
         top_left_mid_first_halfhi, bottom_left_mid_first_halflo, bottom_left_mid_first_halfhi;
 
@@ -977,8 +977,8 @@ void noise_extract_luma_strong_avx2_intrin(EbPictureBufferDesc *input_picture_pt
                 curr_next        = bottom_next;
                 second_top       = second_curr;
                 second_curr      = second_bottom;
-                second_top_prev    = second_curr_prev;
-                second_top_next    = second_curr_next;
+                second_top_prev  = second_curr_prev;
+                second_top_next  = second_curr_next;
                 second_curr_prev = second_bottom_prev;
                 second_curr_next = second_bottom_next;
             }
