@@ -12,6 +12,7 @@
 void largest_coding_unit_dctor(EbPtr p) {
     SuperBlock *obj = (SuperBlock *)p;
     EB_DELETE(obj->quantized_coeff);
+    EB_DELETE(obj->quantized_coeff_temp);
     EB_FREE_ARRAY(obj->av1xd);
     EB_FREE_ARRAY(obj->final_blk_arr);
     EB_FREE_ARRAY(obj->cu_partition_array);
@@ -71,6 +72,9 @@ EbErrorType largest_coding_unit_ctor(SuperBlock *larget_coding_unit_ptr, uint8_t
     EB_NEW(larget_coding_unit_ptr->quantized_coeff,
            eb_picture_buffer_desc_ctor,
            (EbPtr)&coeff_init_data);
+    EB_NEW(larget_coding_unit_ptr->quantized_coeff_temp,
+        eb_picture_buffer_desc_ctor,
+        (EbPtr)&coeff_init_data);
 
     return EB_ErrorNone;
 }

@@ -2267,10 +2267,9 @@ void encode_pass_tx_search(PictureControlSet *pcs_ptr, EncDecContext *context_pt
                            EbPictureBufferDesc *inverse_quant_buffer,
                            uint32_t *count_non_zero_coeffs,
                            uint32_t component_mask, uint16_t *eob,
-                           MacroblockPlane *candidate_plane) {
+                           MacroblockPlane *candidate_plane, int32_t* cul_level, EbPictureBufferDesc* inverse_quant_buffer_temp, EbPictureBufferDesc* coeff_samples_sb_temp) {
     (void)cb_qp;
     (void)candidate_plane;
-    UNUSED(count_non_zero_coeffs);
     UNUSED(component_mask);
 
     BlkStruct *   blk_ptr        = context_ptr->blk_ptr;
@@ -2330,20 +2329,21 @@ void encode_pass_tx_search(PictureControlSet *pcs_ptr, EncDecContext *context_pt
                              ? pcs_ptr->parent_pcs_ptr->frm_hdr.segmentation_params
                                    .feature_data[context_ptr->blk_ptr->segment_id][SEG_LVL_ALT_Q]
                              : 0;
-
-        av1_quantize_inv_quantize(
+        
+        uint16_t eob_temp = 0;
+        int32_t cur_cul_level = av1_quantize_inv_quantize(
             sb_ptr->pcs_ptr,
             context_ptr->md_context,
             ((TranLow *)transform16bit->buffer_y) + coeff1d_offset,
             NOT_USED_VALUE,
-            ((int32_t *)coeff_samples_sb->buffer_y) + coeff1d_offset,
-            ((int32_t *)inverse_quant_buffer->buffer_y) + coeff1d_offset,
+            ((int32_t *)coeff_samples_sb_temp->buffer_y) + coeff1d_offset,
+            ((int32_t *)inverse_quant_buffer_temp->buffer_y) + coeff1d_offset,
             qp,
             seg_qp,
             context_ptr->blk_geom->tx_width[blk_ptr->tx_depth][context_ptr->txb_itr],
             context_ptr->blk_geom->tx_height[blk_ptr->tx_depth][context_ptr->txb_itr],
             context_ptr->blk_geom->txsize[blk_ptr->tx_depth][context_ptr->txb_itr],
-            &eob[0],
+            &eob_temp,
             &y_count_non_zero_coeffs_temp,
             COMPONENT_LUMA,
             EB_8BIT,
@@ -2364,7 +2364,7 @@ void encode_pass_tx_search(PictureControlSet *pcs_ptr, EncDecContext *context_pt
         picture_full_distortion32_bits(transform16bit,
                                        coeff1d_offset,
                                        0,
-                                       inverse_quant_buffer,
+                                       inverse_quant_buffer_temp,
                                        coeff1d_offset,
                                        0,
                                        context_ptr->blk_geom->bwidth,
@@ -2415,7 +2415,7 @@ void encode_pass_tx_search(PictureControlSet *pcs_ptr, EncDecContext *context_pt
             coeff1d_offset,
             0,
             coeff_est_entropy_coder_ptr,
-            coeff_samples_sb,
+            coeff_samples_sb_temp,
             y_count_non_zero_coeffs_temp,
             0,
             0,
@@ -2442,6 +2442,23 @@ void encode_pass_tx_search(PictureControlSet *pcs_ptr, EncDecContext *context_pt
         if (y_full_cost < best_full_cost) {
             best_full_cost = y_full_cost;
             best_tx_type   = tx_type;
+
+            // Quantization level
+            *cul_level = cur_cul_level;
+
+            int32_t n_coeffs = av1_get_max_eob(context_ptr->blk_geom->txsize[blk_ptr->tx_depth][context_ptr->txb_itr]);
+
+            // Coeff_samples_sb
+            memcpy((coeff_samples_sb->buffer_y) + (coeff1d_offset * 4), (coeff_samples_sb_temp->buffer_y) + (coeff1d_offset * 4), n_coeffs * 4);
+
+            // Inverse quant buffer
+            memcpy((inverse_quant_buffer->buffer_y) + (coeff1d_offset * 4), (inverse_quant_buffer_temp->buffer_y) + (coeff1d_offset * 4), n_coeffs * 4);
+
+            // count_non_zero_coeffs
+            *eob = eob_temp;
+
+            // best count_non_zero_coeffs
+            *count_non_zero_coeffs = y_count_non_zero_coeffs_temp;
         }
     }
 

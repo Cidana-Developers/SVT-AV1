@@ -382,6 +382,7 @@ typedef struct SuperBlock {
 
     // Quantized Coefficients
     EbPictureBufferDesc *quantized_coeff;
+    EbPictureBufferDesc* quantized_coeff_temp;
     uint64_t             depth_cost[NUMBER_OF_DEPTH];
     TileInfo             tile_info;
 } SuperBlock;

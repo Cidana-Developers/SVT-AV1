@@ -277,7 +277,8 @@ void encode_pass_tx_search(PictureControlSet *pcs_ptr, EncDecContext *context_pt
                            EbPictureBufferDesc *residual16bit, EbPictureBufferDesc *transform16bit,
                            EbPictureBufferDesc *inverse_quant_buffer,
                            uint32_t *count_non_zero_coeffs, uint32_t component_mask,
-                           uint16_t *eob, MacroblockPlane *candidate_plane);
+                           uint16_t *eob, MacroblockPlane *candidate_plane, int32_t* cul_level,
+                           EbPictureBufferDesc* inverse_quant_buffer_temp, EbPictureBufferDesc* coeff_samples_sb_temp);
 
 /**********************************************************
 * Encode Loop
@@ -399,7 +400,10 @@ static void av1_encode_loop(PictureControlSet *pcs_ptr, EncDecContext *context_p
                                   count_non_zero_coeffs,
                                   component_mask,
                                   eob,
-                                  candidate_plane);
+                                  candidate_plane, 
+                                  &blk_ptr->quantized_dc[0][context_ptr->txb_itr],
+                                  context_ptr->inverse_quant_buffer_temp,
+                                  sb_ptr->quantized_coeff_temp);
         }
 
         av1_estimate_transform(
@@ -891,7 +895,10 @@ static void av1_encode_loop_16bit(PictureControlSet *pcs_ptr, EncDecContext *con
                         count_non_zero_coeffs,
                         component_mask,
                         eob,
-                        candidate_plane);
+                        candidate_plane,
+                        &blk_ptr->quantized_dc[0][context_ptr->txb_itr],
+                        context_ptr->inverse_quant_buffer_temp,
+                        sb_ptr->quantized_coeff_temp);
                 }
             }
 

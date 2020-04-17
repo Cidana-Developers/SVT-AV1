@@ -49,6 +49,7 @@ typedef struct EncDecContext {
     // temporary buffers for decision making of LF (LPF_PICK_FROM_FULL_IMAGE).
     // Since recon switches between reconPtr and referencePtr, the temporary buffers sizes used the referencePtr's which has padding,...
     EbPictureBufferDesc *inverse_quant_buffer;
+    EbPictureBufferDesc* inverse_quant_buffer_temp; // used to store data during best transform type searching
     // Lambda
     uint16_t qp;
     uint8_t  chroma_qp;

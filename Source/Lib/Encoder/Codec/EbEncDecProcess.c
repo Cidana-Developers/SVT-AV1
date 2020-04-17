@@ -48,6 +48,7 @@ static void enc_dec_context_dctor(EbPtr p) {
     EB_DELETE(obj->residual_buffer);
     EB_DELETE(obj->transform_buffer);
     EB_DELETE(obj->inverse_quant_buffer);
+    EB_DELETE(obj->inverse_quant_buffer_temp);
     EB_DELETE(obj->input_sample16bit_buffer);
     if (obj->is_md_rate_estimation_ptr_owner) EB_FREE(obj->md_rate_estimation_ptr);
     EB_FREE_ARRAY(obj);
@@ -145,6 +146,9 @@ EbErrorType enc_dec_context_ctor(EbThreadContext *  thread_context_ptr,
         EB_NEW(context_ptr->inverse_quant_buffer,
                eb_picture_buffer_desc_ctor,
                (EbPtr)&init_32bit_data);
+        EB_NEW(context_ptr->inverse_quant_buffer_temp,
+            eb_picture_buffer_desc_ctor,
+            (EbPtr)&init_32bit_data);
         EB_NEW(context_ptr->transform_buffer, eb_picture_buffer_desc_ctor, (EbPtr)&init_32bit_data);
         EB_NEW(context_ptr->residual_buffer, eb_picture_buffer_desc_ctor, (EbPtr)&init_data);
     }
