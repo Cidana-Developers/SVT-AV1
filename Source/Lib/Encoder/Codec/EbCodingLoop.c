@@ -400,7 +400,7 @@ static void av1_encode_loop(PictureControlSet *pcs_ptr, EncDecContext *context_p
                                   count_non_zero_coeffs,
                                   component_mask,
                                   eob,
-                                  candidate_plane, 
+                                  candidate_plane,
                                   &blk_ptr->quantized_dc[0][context_ptr->txb_itr],
                                   context_ptr->inverse_quant_buffer_temp,
                                   sb_ptr->quantized_coeff_temp);
@@ -881,7 +881,7 @@ static void av1_encode_loop_16bit(PictureControlSet *pcs_ptr, EncDecContext *con
                         count_non_zero_coeffs,
                         component_mask,
                         eob,
-                        candidate_plane, 
+                        candidate_plane,
                         &blk_ptr->quantized_dc[0][context_ptr->txb_itr],
                         context_ptr->inverse_quant_buffer_temp,
                         sb_ptr->quantized_coeff_temp);
