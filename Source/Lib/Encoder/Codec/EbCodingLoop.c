@@ -738,7 +738,7 @@ void encode_pass_tx_search_hbd(
     EbPictureBufferDesc *coeff_samples_sb, EbPictureBufferDesc *residual16bit,
     EbPictureBufferDesc *transform16bit, EbPictureBufferDesc *inverse_quant_buffer,
     uint32_t *count_non_zero_coeffs, uint32_t component_mask,
-    uint16_t *eob, MacroblockPlane *candidate_plane);
+    uint16_t *eob, MacroblockPlane *candidate_plane, int32_t* cul_level, EbPictureBufferDesc* inverse_quant_buffer_temp, EbPictureBufferDesc* coeff_samples_sb_temp);
 
 /**********************************************************
 * Encode Loop
