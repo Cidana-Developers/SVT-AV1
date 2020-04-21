@@ -2329,7 +2329,6 @@ void encode_pass_tx_search(PictureControlSet *pcs_ptr, EncDecContext *context_pt
                              ? pcs_ptr->parent_pcs_ptr->frm_hdr.segmentation_params
                                    .feature_data[context_ptr->blk_ptr->segment_id][SEG_LVL_ALT_Q]
                              : 0;
-        
         uint16_t eob_temp = 0;
         int32_t cur_cul_level = av1_quantize_inv_quantize(
             sb_ptr->pcs_ptr,
@@ -2533,7 +2532,6 @@ void encode_pass_tx_search_hbd(
                              ? pcs_ptr->parent_pcs_ptr->frm_hdr.segmentation_params
                                    .feature_data[context_ptr->blk_ptr->segment_id][SEG_LVL_ALT_Q]
                              : 0;
-        
         uint16_t eob_temp = 0;
         int32_t cur_cul_level = av1_quantize_inv_quantize(
             sb_ptr->pcs_ptr,
