@@ -405,54 +405,56 @@ static void av1_encode_loop(PictureControlSet *pcs_ptr, EncDecContext *context_p
                                   context_ptr->inverse_quant_buffer_temp,
                                   sb_ptr->quantized_coeff_temp);
         }
+        
+        if (tx_search_skip_flag || eob[0] > 4096) {
+            av1_estimate_transform(
+                ((int16_t*)residual16bit->buffer_y) + scratch_luma_offset,
+                residual16bit->stride_y,
+                ((TranLow*)transform16bit->buffer_y) + coeff1d_offset,
+                NOT_USED_VALUE,
+                context_ptr->blk_geom->txsize[blk_ptr->tx_depth][context_ptr->txb_itr],
+                &context_ptr->three_quad_energy,
+                EB_8BIT,
+                txb_ptr->transform_type[PLANE_TYPE_Y],
+                PLANE_TYPE_Y,
+                DEFAULT_SHAPE);
 
-        av1_estimate_transform(
-            ((int16_t *)residual16bit->buffer_y) + scratch_luma_offset,
-            residual16bit->stride_y,
-            ((TranLow *)transform16bit->buffer_y) + coeff1d_offset,
-            NOT_USED_VALUE,
-            context_ptr->blk_geom->txsize[blk_ptr->tx_depth][context_ptr->txb_itr],
-            &context_ptr->three_quad_energy,
-            EB_8BIT,
-            txb_ptr->transform_type[PLANE_TYPE_Y],
-            PLANE_TYPE_Y,
-            DEFAULT_SHAPE);
+            int32_t seg_qp = pcs_ptr->parent_pcs_ptr->frm_hdr.segmentation_params.segmentation_enabled
+                ? pcs_ptr->parent_pcs_ptr->frm_hdr.segmentation_params
+                .feature_data[context_ptr->blk_ptr->segment_id][SEG_LVL_ALT_Q]
+                : 0;
 
-        int32_t seg_qp = pcs_ptr->parent_pcs_ptr->frm_hdr.segmentation_params.segmentation_enabled
-                             ? pcs_ptr->parent_pcs_ptr->frm_hdr.segmentation_params
-                                   .feature_data[context_ptr->blk_ptr->segment_id][SEG_LVL_ALT_Q]
-                             : 0;
-
-        blk_ptr->quantized_dc[0][context_ptr->txb_itr] = av1_quantize_inv_quantize(
-            sb_ptr->pcs_ptr,
-            context_ptr->md_context,
-            ((TranLow *)transform16bit->buffer_y) + coeff1d_offset,
-            NOT_USED_VALUE,
-            ((int32_t *)coeff_samples_sb->buffer_y) + coeff1d_offset,
-            ((int32_t *)inverse_quant_buffer->buffer_y) + coeff1d_offset,
-            qp,
-            seg_qp,
-            context_ptr->blk_geom->tx_width[blk_ptr->tx_depth][context_ptr->txb_itr],
-            context_ptr->blk_geom->tx_height[blk_ptr->tx_depth][context_ptr->txb_itr],
-            context_ptr->blk_geom->txsize[blk_ptr->tx_depth][context_ptr->txb_itr],
-            &eob[0],
-            &(count_non_zero_coeffs[0]),
-            COMPONENT_LUMA,
-            EB_8BIT,
-            txb_ptr->transform_type[PLANE_TYPE_Y],
-            &(context_ptr->md_context->candidate_buffer_ptr_array[0][0]),
-            context_ptr->md_context->luma_txb_skip_context,
-            context_ptr->md_context->luma_dc_sign_context,
-            blk_ptr->pred_mode,
-            blk_ptr->av1xd->use_intrabc,
+            blk_ptr->quantized_dc[0][context_ptr->txb_itr] = av1_quantize_inv_quantize(
+                sb_ptr->pcs_ptr,
+                context_ptr->md_context,
+                ((TranLow*)transform16bit->buffer_y) + coeff1d_offset,
+                NOT_USED_VALUE,
+                ((int32_t*)coeff_samples_sb->buffer_y) + coeff1d_offset,
+                ((int32_t*)inverse_quant_buffer->buffer_y) + coeff1d_offset,
+                qp,
+                seg_qp,
+                context_ptr->blk_geom->tx_width[blk_ptr->tx_depth][context_ptr->txb_itr],
+                context_ptr->blk_geom->tx_height[blk_ptr->tx_depth][context_ptr->txb_itr],
+                context_ptr->blk_geom->txsize[blk_ptr->tx_depth][context_ptr->txb_itr],
+                &eob[0],
+                &(count_non_zero_coeffs[0]),
+                COMPONENT_LUMA,
+                EB_8BIT,
+                txb_ptr->transform_type[PLANE_TYPE_Y],
+                &(context_ptr->md_context->candidate_buffer_ptr_array[0][0]),
+                context_ptr->md_context->luma_txb_skip_context,
+                context_ptr->md_context->luma_dc_sign_context,
+                blk_ptr->pred_mode,
+                blk_ptr->av1xd->use_intrabc,
 #if OMARK_HBD0_RDOQ
 #if NEW_MD_LAMBDA
-            context_ptr->md_context->full_lambda_md[EB_8_BIT_MD],
+                context_ptr->md_context->full_lambda_md[EB_8_BIT_MD],
 #else
-            context_ptr->full_lambda,
+                context_ptr->full_lambda,
 #endif
 #endif
-            EB_TRUE);
+                EB_TRUE);
+        }
 
         if (context_ptr->md_skip_blk) {
             count_non_zero_coeffs[0] = 0;
