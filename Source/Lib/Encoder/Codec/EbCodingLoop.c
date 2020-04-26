@@ -369,9 +369,16 @@ static void av1_encode_loop(PictureControlSet *pcs_ptr, EncDecContext *context_p
     UNUSED(coeff1d_offset_chroma);
 
     context_ptr->three_quad_energy = 0;
+
+    // EOB Initialization (0xCCCC)
+    eob[0] = 52428;
+    eob[1] = 52428;
+    eob[2] = 52428;
+
     //**********************************
     // Luma
     //**********************************
+
     if (component_mask == PICTURE_BUFFER_DESC_FULL_MASK ||
         component_mask == PICTURE_BUFFER_DESC_LUMA_MASK) {
         residual_kernel8bit(
@@ -405,6 +412,7 @@ static void av1_encode_loop(PictureControlSet *pcs_ptr, EncDecContext *context_p
                                   context_ptr->inverse_quant_buffer_temp,
                                   sb_ptr->quantized_coeff_temp);
         }
+
         if (tx_search_skip_flag || eob[0] > 4096) {
             av1_estimate_transform(
                 ((int16_t*)residual16bit->buffer_y) + scratch_luma_offset,

@@ -2333,10 +2333,10 @@ void encode_pass_tx_search(PictureControlSet *pcs_ptr, EncDecContext *context_pt
         int32_t cur_cul_level = av1_quantize_inv_quantize(
             sb_ptr->pcs_ptr,
             context_ptr->md_context,
-            ((TranLow *)transform16bit->buffer_y) + coeff1d_offset,
+            ((TranLow*)transform16bit->buffer_y) + coeff1d_offset,
             NOT_USED_VALUE,
-            ((int32_t *)coeff_samples_sb_temp->buffer_y) + coeff1d_offset,
-            ((int32_t *)inverse_quant_buffer_temp->buffer_y) + coeff1d_offset,
+            ((int32_t*)coeff_samples_sb_temp->buffer_y) + coeff1d_offset,
+            ((int32_t*)inverse_quant_buffer_temp->buffer_y) + coeff1d_offset,
             qp,
             seg_qp,
             context_ptr->blk_geom->tx_width[blk_ptr->tx_depth][context_ptr->txb_itr],
@@ -2348,17 +2348,18 @@ void encode_pass_tx_search(PictureControlSet *pcs_ptr, EncDecContext *context_pt
             EB_8BIT,
             tx_type,
             &(context_ptr->md_context->candidate_buffer_ptr_array[0][0]),
-            //0,
-            //0,
-            //0,
-            context_ptr->md_context->luma_txb_skip_context,
-            context_ptr->md_context->luma_dc_sign_context,
-            blk_ptr->pred_mode,
+            0,
+            0,
+            0,
+            //context_ptr->md_context->luma_txb_skip_context,
+            //context_ptr->md_context->luma_dc_sign_context,
+            //blk_ptr->pred_mode,
             blk_ptr->av1xd->use_intrabc,
 #if OMARK_HBD0_RDOQ
             context_ptr->full_lambda,
 #endif
             EB_FALSE);
+
 
         //tx_type not equal to DCT_DCT and no coeff is not an acceptable option in AV1.
         if (y_count_non_zero_coeffs_temp == 0 && tx_type != DCT_DCT) continue;
