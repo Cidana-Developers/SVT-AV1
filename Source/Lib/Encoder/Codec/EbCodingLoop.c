@@ -405,7 +405,6 @@ static void av1_encode_loop(PictureControlSet *pcs_ptr, EncDecContext *context_p
                                   context_ptr->inverse_quant_buffer_temp,
                                   sb_ptr->quantized_coeff_temp);
         }
-        
         if (tx_search_skip_flag || eob[0] > 4096) {
             av1_estimate_transform(
                 ((int16_t*)residual16bit->buffer_y) + scratch_luma_offset,
