@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! $NOTROOT = 1 ]; then
+if [[ $NOTROOT != 1 ]]; then
   SUDO=sudo
 fi
 
