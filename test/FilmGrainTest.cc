@@ -425,6 +425,23 @@ class DenoiseModelRunTest : public ::testing::Test {
         }
     }
 
+    void TearDown() override {
+        // reset the global function variables to avoid assert failure
+        {
+            svt_aom_fft2x2_float = NULL;
+            svt_aom_fft4x4_float = NULL;
+            svt_aom_fft16x16_float = NULL;
+            svt_aom_fft32x32_float = NULL;
+            svt_aom_fft8x8_float = NULL;
+
+            svt_aom_ifft16x16_float = NULL;
+            svt_aom_ifft32x32_float = NULL;
+            svt_aom_ifft8x8_float = NULL;
+            svt_aom_ifft2x2_float = NULL;
+            svt_aom_ifft4x4_float = NULL;
+        }
+    }
+
     void init_data() {
         const int shift = EB_8BIT - 8;
         for (int y = 0; y < height_; ++y) {
