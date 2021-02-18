@@ -25,5 +25,6 @@
 void setup_test_env() {
     CPU_FLAGS cpu_flags = get_cpu_flags_to_use();
 
+    setup_common_rtcd_internal(cpu_flags);
     setup_rtcd_internal(cpu_flags);
 }
